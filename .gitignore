@@ -1,2 +1,36 @@
-docs/*
-.idea/*
+# Symfony
+/var/
+/vendor/
+
+# Environment – local files are never committed
+.env
+.env.local
+.env.local.php
+.env.*.local
+
+# .env.example and .env.test ARE committed (documentation / test defaults)
+
+# Docker local overrides
+docker-compose.override.yml
+
+# IDE
+/.idea/
+/.vscode/
+*.sw*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Project docs (private)
+/docs/
+
+# PHPUnit
+.phpunit.result.cache
+/phpunit.xml
+
+# PHP CS Fixer
+.php-cs-fixer.cache
+
+# PHPStan
+/phpstan.result.cache

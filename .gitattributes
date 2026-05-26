@@ -1,0 +1,24 @@
+# Force LF line endings for all text files
+* text=auto eol=lf
+
+# PHP files always LF
+*.php text eol=lf
+
+# Config files always LF
+*.yml text eol=lf
+*.yaml text eol=lf
+*.json text eol=lf
+*.xml text eol=lf
+*.neon text eol=lf
+*.ini text eol=lf
+*.conf text eol=lf
+
+# Shell scripts always LF
+*.sh text eol=lf
+
+# Markdown always LF
+*.md text eol=lf
+
+# Windows-specific files keep CRLF
+*.bat text eol=crlf
+*.cmd text eol=crlf
