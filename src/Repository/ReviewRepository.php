@@ -32,19 +32,24 @@ class ReviewRepository extends ServiceEntityRepository
     /**
      * @return array<int, array{company_name: string, review_count: int, average_rating: float}>
      */
-    public function getCompanyStats(): array
+    public function getCompanyStats(?string $search = null): array
     {
-        /** @var array<int, array{company_name: string, review_count: string, average_rating: string}> $rows */
-        $rows = $this->createQueryBuilder('r')
+        $qb = $this->createQueryBuilder('r')
             ->select(
                 'r.companyName AS company_name',
                 'COUNT(r.id) AS review_count',
                 'AVG(r.rating) AS average_rating'
             )
             ->groupBy('r.companyName')
-            ->orderBy('average_rating', 'DESC')
-            ->getQuery()
-            ->getScalarResult();
+            ->orderBy('average_rating', 'DESC');
+
+        if (null !== $search && '' !== $search) {
+            $qb->andWhere('LOWER(r.companyName) LIKE LOWER(:search)')
+               ->setParameter('search', '%'.$search.'%');
+        }
+
+        /** @var array<int, array{company_name: string, review_count: string, average_rating: string}> $rows */
+        $rows = $qb->getQuery()->getScalarResult();
 
         return array_map(
             static fn (array $row): array => [

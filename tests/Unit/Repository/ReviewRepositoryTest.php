@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Tests\Unit\Repository;
 
-use Doctrine\ORM\QueryBuilder;
 use PHPUnit\Framework\TestCase;
 
 class ReviewRepositoryTest extends TestCase
@@ -15,7 +14,6 @@ class ReviewRepositoryTest extends TestCase
      */
     public function testCompanyStatsRowNormalization(): void
     {
-        // Szimulált DB sor: Doctrine DBAL mindig stringet ad vissza skalár értékeknél
         $rawRow = [
             'company_name' => 'Acme Corp',
             'review_count' => '7',
@@ -54,6 +52,36 @@ class ReviewRepositoryTest extends TestCase
         $normalized = $this->normalizeStatsRow($rawRow);
 
         $this->assertSame(3.67, $normalized['average_rating']);
+    }
+
+    public function testCompanyStatsRowNormalizationZeroAverage(): void
+    {
+        // Edge case: egyetlen review, rating=1
+        $rawRow = [
+            'company_name' => 'Edge Case Ltd',
+            'review_count' => '1',
+            'average_rating' => '1.0',
+        ];
+
+        $normalized = $this->normalizeStatsRow($rawRow);
+
+        $this->assertSame(1, $normalized['review_count']);
+        $this->assertSame(1.0, $normalized['average_rating']);
+    }
+
+    public function testCompanyStatsRowNormalizationPerfectScore(): void
+    {
+        // Edge case: minden review 5-ös
+        $rawRow = [
+            'company_name' => 'Perfect Corp',
+            'review_count' => '100',
+            'average_rating' => '5.0',
+        ];
+
+        $normalized = $this->normalizeStatsRow($rawRow);
+
+        $this->assertSame(100, $normalized['review_count']);
+        $this->assertSame(5.0, $normalized['average_rating']);
     }
 
     /**

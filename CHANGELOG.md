@@ -6,6 +6,25 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+## [0.4.0] - 2026-05-27
+
+### Added (M4 – Részletező + statisztika + keresés + health check)
+- `GET /review/{id}` – részletező oldal, 404 ha nem létezik (`requirements: ['\d+']`)
+- `GET /companies` – táblázatos cégrangsor: véleményszám + átlagos értékelés, csökkenő sorrend
+- `GET /companies?q=...` – case-insensitive ILIKE keresés cég neve alapján
+- `GET /health` – `{"status":"ok","db":"ok","timestamp":"..."}` JSON válasz; 503 ha DB error
+- `ReviewRepository::getCompanyStats(?string $search)` – keresési paraméter támogatás hozzáadva
+- `templates/review/show.html.twig` – Bootstrap kártyás részletező, csillagok, email, dátumok
+- `templates/companies/index.html.twig` – táblázatos nézet, keresőmező, üres/találat nélküli állapot
+- `templates/bundles/TwigBundle/Exception/error404.html.twig` – egyedi 404 oldal, Bootstrap stílusban
+- `templates/bundles/TwigBundle/Exception/error.html.twig` – egyedi általános hibaoldal (5xx)
+- `tests/Functional/ReviewFormTest` – 5 új funkcionális teszt M4 route-okhoz:
+    - `testShowReviewReturns200` – részletező 200 + cégnév látszik
+    - `testShowReviewReturns404ForUnknownId` – 999999 → 404
+    - `testCompaniesPageReturns200` – /companies 200 + táblázat
+    - `testCompaniesSearchReturnsFilteredResults` – ?q=filter szűr
+    - `testHealthCheckReturnsOk` – JSON struktúra + status=ok
+
 ## [0.3.0] - 2026-05-27
 
 ### Added (M3 – Form + validáció + flash + strukturált logolás)

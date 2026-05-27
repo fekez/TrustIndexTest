@@ -44,6 +44,10 @@ Az alkalmazás elérhető: http://localhost:8080
 
 - **Lista oldal** (`GET /`) – vélemények kártyás listája, csillagos értékeléssel, csonkított szöveggel
 - **Új vélemény** (`GET/POST /review/new`) – form validációval, flash üzenettel sikeres mentés után
+- **Részletező** (`GET /review/{id}`) – egy vélemény teljes szövege, dátumok, email
+- **Cégrangsor** (`GET /companies`) – átlagos értékelés és véleményszám cégenként, csökkenő sorrendben
+- **Keresés** (`GET /companies?q=...`) – case-insensitive részleges keresés cég neve alapján
+- **Health check** (`GET /health`) – `{"status":"ok","db":"ok","timestamp":"..."}` JSON válasz
 - **Strukturált logolás** – minden mentett vélemény JSON formátumban naplózva (`var/log/dev.log`)
 
 ---
@@ -51,13 +55,16 @@ Az alkalmazás elérhető: http://localhost:8080
 ## Tesztek futtatása
 
 ```bash
-# Összes teszt (17 db)
+# Összes teszt (26 db)
 docker compose exec php bin/phpunit
 
-# Csak unit tesztek
+# Csak unit tesztek (13 db)
 docker compose exec php bin/phpunit --testsuite Unit
 
-# Csak funkcionális tesztek
+# Csak integrációs tesztek (8 db)
+docker compose exec php bin/phpunit --testsuite Integration
+
+# Csak funkcionális tesztek (9 db)
 docker compose exec php bin/phpunit --testsuite Functional
 ```
 
@@ -75,9 +82,10 @@ docker compose exec php vendor/bin/phpstan analyse
 
 ## Munkaidő napló
 
-| Feladat | Idő        |
-|---------|------------|
-| M1 – Docker + Symfony skeleton + CI | ~1.5 óra   |
-| M2 – Entitás + migráció + lista | ~1.5 óra   |
-| M3 – Form + validáció + flash + logolás | ~1 óra     |
-| **Összesen** | **~4 óra** |
+| Feladat | Idő          |
+|---------|--------------|
+| M1 – Docker + Symfony skeleton + CI | ~1.5 óra     |
+| M2 – Entitás + migráció + lista | ~1.5 óra     |
+| M3 – Form + validáció + flash + logolás | ~1 óra       |
+| M4 – Részletező + statisztika + keresés + health check | ~0.5 óra     |
+| **Összesen** | **~4.5 óra** |
