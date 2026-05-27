@@ -1,1 +1,73 @@
 # TrustIndexTest
+
+Cégértékelő minialkalmazás – Trustindex medior PHP fejlesztői tesztfeladat.
+
+**Stack:** PHP 8.2, Symfony 7.4, Doctrine ORM, PostgreSQL 16, Docker Compose, PHPUnit 11
+
+---
+
+## Követelmények
+
+- Docker Desktop
+- Git
+
+---
+
+## Telepítés és indítás
+
+```bash
+# 1. Repo klónozása
+git clone https://github.com/fekez/TrustIndexTest.git
+cd TrustIndexTest
+
+# 2. Környezeti változók
+cp .env.example .env
+
+# 3. Docker indítása
+docker compose up -d
+
+# 4. Függőségek telepítése
+docker compose exec php composer install
+
+# 5. Adatbázis migráció
+docker compose exec php bin/console doctrine:migrations:migrate --no-interaction
+
+# 6. Teszt adatok betöltése (opcionális)
+docker compose exec php bin/console doctrine:fixtures:load --no-interaction
+```
+
+Az alkalmazás elérhető: http://localhost:8080
+
+---
+
+## Tesztek futtatása
+
+```bash
+# Összes teszt
+docker compose exec php bin/phpunit
+
+# Csak unit tesztek
+docker compose exec php bin/phpunit --testsuite Unit
+
+# Csak integrációs tesztek
+docker compose exec php bin/phpunit --testsuite Integration
+```
+
+---
+
+## Kódminőség ellenőrzés
+
+```bash
+docker compose exec php vendor/bin/php-cs-fixer check --diff
+docker compose exec php vendor/bin/phpcs
+docker compose exec php vendor/bin/phpstan analyse
+```
+
+---
+
+## Munkaidő napló
+
+| Feladat | Idő      |
+|---------|----------|
+| M1 – Docker + Symfony skeleton + CI | ~1.5 óra |
+| M2 – Entitás + migráció + lista | ~1.5 óra |

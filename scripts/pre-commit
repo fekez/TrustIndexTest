@@ -7,19 +7,23 @@ set -e
 echo "Running pre-commit checks..."
 
 # 1. PHP Lint
-echo "\n[1/4] PHP Lint..."
+echo "\n[1/5] PHP Lint..."
 docker compose exec -T php find src tests -name "*.php" -exec php -l {} \;
 
 # 2. PHP CS Fixer
-echo "\n[2/4] PHP CS Fixer..."
+echo "\n[2/5] PHP CS Fixer..."
 docker compose exec -T php vendor/bin/php-cs-fixer check --diff
 
 # 3. PHP CodeSniffer
-echo "\n[3/4] PHP CodeSniffer..."
+echo "\n[3/5] PHP CodeSniffer..."
 docker compose exec -T php vendor/bin/phpcs
 
 # 4. PHPStan
-echo "\n[4/4] PHPStan..."
+echo "\n[4/5] PHPStan..."
 docker compose exec -T php vendor/bin/phpstan analyse
+
+# 5. PHPUnit
+echo "\n[5/5] PHPUnit..."
+docker compose exec -T php bin/phpunit
 
 echo "\nAll checks passed. Proceeding with commit."

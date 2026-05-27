@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Vélemények{% endblock %}
+
+{% block body %}
+    <div style="max-width: 800px; margin: 2rem auto; font-family: sans-serif;">
+        <h1>Vélemények</h1>
+
+        {% if reviews is empty %}
+            <p>Még nincs vélemény.</p>
+        {% else %}
+            {% for review in reviews %}
+                <div style="border: 1px solid #ddd; border-radius: 6px; padding: 1rem; margin-bottom: 1rem;">
+                    <h2 style="margin: 0 0 0.25rem;">{{ review.companyName }}</h2>
+                    <div style="color: #f5a623; font-size: 1.2rem; margin-bottom: 0.5rem;">
+                        {% for i in 1..5 %}
+                            {{ i <= review.rating ? '★' : '☆' }}
+                        {% endfor %}
+                        <span style="color: #666; font-size: 0.9rem;">({{ review.rating }}/5)</span>
+                    </div>
+                    <p style="margin: 0.5rem 0; color: #333;">
+                        {{ review.reviewText|length > 120 ? review.reviewText|slice(0, 120) ~ '…' : review.reviewText }}
+                    </p>
+                    <small style="color: #999;">
+                        {{ review.authorEmail }} &middot; {{ review.createdAt|date('Y. m. d.') }}
+                    </small>
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+{% endblock %}

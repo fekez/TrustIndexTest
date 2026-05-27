@@ -10,5 +10,13 @@
         <exclude name="PSR12.Operators.OperatorSpacing"/>
     </rule>
 
+    <rule ref="Generic.Files.LineLength">
+        <properties>
+            <property name="lineLimit" value="120"/>
+            <property name="absoluteLineLimit" value="0"/>
+        </properties>
+        <exclude-pattern>src/DataFixtures/*</exclude-pattern>
+    </rule>
+
     <ini name="memory_limit" value="256M"/>
 </ruleset>
