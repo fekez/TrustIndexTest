@@ -40,17 +40,25 @@ Az alkalmazás elérhető: http://localhost:8080
 
 ---
 
+## Funkciók
+
+- **Lista oldal** (`GET /`) – vélemények kártyás listája, csillagos értékeléssel, csonkított szöveggel
+- **Új vélemény** (`GET/POST /review/new`) – form validációval, flash üzenettel sikeres mentés után
+- **Strukturált logolás** – minden mentett vélemény JSON formátumban naplózva (`var/log/dev.log`)
+
+---
+
 ## Tesztek futtatása
 
 ```bash
-# Összes teszt
+# Összes teszt (17 db)
 docker compose exec php bin/phpunit
 
 # Csak unit tesztek
 docker compose exec php bin/phpunit --testsuite Unit
 
-# Csak integrációs tesztek
-docker compose exec php bin/phpunit --testsuite Integration
+# Csak funkcionális tesztek
+docker compose exec php bin/phpunit --testsuite Functional
 ```
 
 ---
@@ -67,7 +75,9 @@ docker compose exec php vendor/bin/phpstan analyse
 
 ## Munkaidő napló
 
-| Feladat | Idő      |
-|---------|----------|
-| M1 – Docker + Symfony skeleton + CI | ~1.5 óra |
-| M2 – Entitás + migráció + lista | ~1.5 óra |
+| Feladat | Idő        |
+|---------|------------|
+| M1 – Docker + Symfony skeleton + CI | ~1.5 óra   |
+| M2 – Entitás + migráció + lista | ~1.5 óra   |
+| M3 – Form + validáció + flash + logolás | ~1 óra     |
+| **Összesen** | **~4 óra** |

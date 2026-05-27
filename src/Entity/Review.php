@@ -7,6 +7,7 @@ namespace App\Entity;
 use App\Repository\ReviewRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ReviewRepository::class)]
 #[ORM\Table(name: 'review')]
@@ -19,16 +20,23 @@ class Review
     private ?int $id = null;
 
     #[ORM\Column(type: Types::STRING, length: 255)]
-    private string $companyName = '';
+    #[Assert\NotBlank(message: 'A cég neve nem lehet üres.')]
+    #[Assert\Length(max: 255, maxMessage: 'A cég neve legfeljebb 255 karakter lehet.')]
+    private ?string $companyName = null;
 
     #[ORM\Column(type: Types::SMALLINT)]
-    private int $rating = 1;
+    #[Assert\NotNull(message: 'Az értékelés megadása kötelező.')]
+    #[Assert\Range(min: 1, max: 5, notInRangeMessage: 'Az értékelésnek 1 és 5 között kell lennie.')]
+    private int $rating = 5;
 
     #[ORM\Column(type: Types::TEXT)]
-    private string $reviewText = '';
+    #[Assert\NotBlank(message: 'A vélemény szövege nem lehet üres.')]
+    private ?string $reviewText = null;
 
     #[ORM\Column(type: Types::STRING, length: 255)]
-    private string $authorEmail = '';
+    #[Assert\NotBlank(message: 'Az e-mail cím megadása kötelező.')]
+    #[Assert\Email(message: 'Érvénytelen e-mail formátum.')]
+    private ?string $authorEmail = null;
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
     private \DateTimeImmutable $createdAt;
@@ -53,12 +61,12 @@ class Review
         return $this->id;
     }
 
-    public function getCompanyName(): string
+    public function getCompanyName(): ?string
     {
         return $this->companyName;
     }
 
-    public function setCompanyName(string $companyName): static
+    public function setCompanyName(?string $companyName): static
     {
         $this->companyName = $companyName;
 
@@ -77,24 +85,24 @@ class Review
         return $this;
     }
 
-    public function getReviewText(): string
+    public function getReviewText(): ?string
     {
         return $this->reviewText;
     }
 
-    public function setReviewText(string $reviewText): static
+    public function setReviewText(?string $reviewText): static
     {
         $this->reviewText = $reviewText;
 
         return $this;
     }
 
-    public function getAuthorEmail(): string
+    public function getAuthorEmail(): ?string
     {
         return $this->authorEmail;
     }
 
-    public function setAuthorEmail(string $authorEmail): static
+    public function setAuthorEmail(?string $authorEmail): static
     {
         $this->authorEmail = $authorEmail;
 

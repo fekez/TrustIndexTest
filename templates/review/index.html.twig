@@ -3,29 +3,39 @@
 {% block title %}Vélemények{% endblock %}
 
 {% block body %}
-    <div style="max-width: 800px; margin: 2rem auto; font-family: sans-serif;">
-        <h1>Vélemények</h1>
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h3 mb-0">Vélemények</h1>
+    <a href="{{ path('review_new') }}" class="btn btn-primary">+ Új vélemény</a>
+</div>
 
-        {% if reviews is empty %}
-            <p>Még nincs vélemény.</p>
-        {% else %}
-            {% for review in reviews %}
-                <div style="border: 1px solid #ddd; border-radius: 6px; padding: 1rem; margin-bottom: 1rem;">
-                    <h2 style="margin: 0 0 0.25rem;">{{ review.companyName }}</h2>
-                    <div style="color: #f5a623; font-size: 1.2rem; margin-bottom: 0.5rem;">
+{% if reviews is empty %}
+    <div class="alert alert-info">Még nincs vélemény. Legyél az első!</div>
+{% else %}
+    <div class="row g-3">
+        {% for review in reviews %}
+        <div class="col-12">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <h5 class="card-title mb-1">{{ review.companyName }}</h5>
+                        <small class="text-muted">{{ review.createdAt|date('Y. m. d.') }}</small>
+                    </div>
+                    <div class="text-warning mb-2" aria-label="{{ review.rating }} csillag az 5-ből">
                         {% for i in 1..5 %}
                             {{ i <= review.rating ? '★' : '☆' }}
                         {% endfor %}
-                        <span style="color: #666; font-size: 0.9rem;">({{ review.rating }}/5)</span>
+                        <span class="text-muted small">({{ review.rating }}/5)</span>
                     </div>
-                    <p style="margin: 0.5rem 0; color: #333;">
-                        {{ review.reviewText|length > 120 ? review.reviewText|slice(0, 120) ~ '…' : review.reviewText }}
+                    <p class="card-text text-secondary mb-1">
+                        {{ review.reviewText|length > 120
+                            ? review.reviewText|slice(0, 120) ~ '…'
+                            : review.reviewText }}
                     </p>
-                    <small style="color: #999;">
-                        {{ review.authorEmail }} &middot; {{ review.createdAt|date('Y. m. d.') }}
-                    </small>
+                    <small class="text-muted">{{ review.authorEmail }}</small>
                 </div>
-            {% endfor %}
-        {% endif %}
+            </div>
+        </div>
+        {% endfor %}
     </div>
+{% endif %}
 {% endblock %}

@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Új vélemény{% endblock %}
+
+{% block body %}
+<div class="row justify-content-center">
+    <div class="col-md-7 col-lg-6">
+        <div class="card shadow-sm">
+            <div class="card-header bg-white">
+                <h4 class="mb-0">Új vélemény írása</h4>
+            </div>
+            <div class="card-body">
+                {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+
+                <div class="mb-3">
+                    {{ form_label(form.companyName, null, {'label_attr': {'class': 'form-label fw-semibold'}}) }}
+                    {{ form_widget(form.companyName, {'attr': {'class': 'form-control' ~ (form.companyName.vars.errors|length > 0 ? ' is-invalid' : '')}}) }}
+                    {{ form_errors(form.companyName) }}
+                </div>
+
+                <div class="mb-3">
+                    {{ form_label(form.rating, null, {'label_attr': {'class': 'form-label fw-semibold'}}) }}
+                    {{ form_widget(form.rating, {'attr': {'class': 'form-select' ~ (form.rating.vars.errors|length > 0 ? ' is-invalid' : '')}}) }}
+                    {{ form_errors(form.rating) }}
+                </div>
+
+                <div class="mb-3">
+                    {{ form_label(form.reviewText, null, {'label_attr': {'class': 'form-label fw-semibold'}}) }}
+                    {{ form_widget(form.reviewText, {'attr': {'class': 'form-control' ~ (form.reviewText.vars.errors|length > 0 ? ' is-invalid' : '')}}) }}
+                    {{ form_errors(form.reviewText) }}
+                </div>
+
+                <div class="mb-4">
+                    {{ form_label(form.authorEmail, null, {'label_attr': {'class': 'form-label fw-semibold'}}) }}
+                    {{ form_widget(form.authorEmail, {'attr': {'class': 'form-control' ~ (form.authorEmail.vars.errors|length > 0 ? ' is-invalid' : '')}}) }}
+                    {{ form_errors(form.authorEmail) }}
+                </div>
+
+                <div class="d-grid">
+                    {{ form_widget(form.submit) }}
+                </div>
+
+                {{ form_end(form) }}
+            </div>
+        </div>
+        <div class="mt-3 text-center">
+            <a href="{{ path('review_index') }}" class="text-muted small">← Vissza a listához</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

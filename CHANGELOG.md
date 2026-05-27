@@ -6,6 +6,24 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-05-27
+
+### Added (M3 – Form + validáció + flash + strukturált logolás)
+- `src/Form/ReviewType.php` – Symfony form osztály (TextType, ChoiceType, EmailType, TextareaType)
+- `POST /review/new` – form feldolgozás, perzisztálás, redirect + flash üzenet
+- Validációs constraint-ek a `Review` entitáson: `NotBlank`, `Length`, `Range`, `Email`
+- Flash üzenet sikeres mentés után (`alert-success`)
+- Monolog JSON formatter dev és prod környezetben; `review.created` strukturált log bejegyzés
+- `templates/base.html.twig` – Bootstrap 5.3 layout, navbar, flash megjelenítés
+- `templates/review/index.html.twig` – végleges Bootstrap kártyás lista, csillagok, csonkított szöveg
+- `templates/review/new.html.twig` – form oldal Bootstrap stílussal, inline validációs hibák
+- `tests/Unit/ReviewValidationTest` – 8 unit teszt: boundary értékek, email formátum, kötelező mezők
+- `tests/Functional/ReviewFormTest` – 4 funkcionális teszt: GET /, GET /review/new, valid submit, invalid submit
+
+### Changed
+- `src/Entity/Review.php` – property típusok `?string`-re lazítva a form null-kezeléséhez
+- `config/packages/monolog.yaml` – JSON formatter hozzáadva dev handler-hez
+
 ## [0.2.0] - 2026-05-27
 
 ### Added (M2 – Entitás + migráció + primitív lista)
