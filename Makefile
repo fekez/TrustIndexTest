@@ -3,6 +3,14 @@
 help: ## Show available commands
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-15s\033[0m %s\n", $$1, $$2}'
 
+install: ## Full setup from scratch: env + containers + deps + db + cache
+	cp .env.prod.example .env 2>/dev/null || copy .env.prod.example .env
+	docker compose up -d --build
+	docker compose exec php composer install --no-dev --optimize-autoloader --no-scripts
+	docker compose exec php php bin/console doctrine:migrations:migrate --no-interaction
+	docker compose exec php php bin/console cache:clear
+	docker compose exec php php bin/console cache:warmup
+
 up: ## Start all containers
 	docker compose up -d
 
@@ -26,6 +34,12 @@ migrate-diff: ## Generate new migration
 
 fixtures: ## Load data fixtures
 	docker compose exec php php bin/console doctrine:fixtures:load --no-interaction
+
+cache-clear: ## Clear Symfony cache
+	docker compose exec php php bin/console cache:clear
+
+cache-warmup: ## Warm up Symfony cache
+	docker compose exec php php bin/console cache:warmup
 
 test: ## Run all tests
 	docker compose exec php php bin/phpunit
@@ -51,9 +65,6 @@ stan: ## Run static analysis
 lint: ## Lint all PHP files
 	docker compose exec php find src tests -name "*.php" -exec php -l {} \;
 
-cache-clear: ## Clear Symfony cache
-	docker compose exec php php bin/console cache:clear
-
 check: ## Run all pre-commit checks locally (same as CI)
 	docker compose exec php find src tests -name "*.php" -exec php -l {} \;
 	docker compose exec php vendor/bin/php-cs-fixer check --diff
@@ -65,4 +76,4 @@ install-hooks: ## Install git pre-commit hook
 	chmod +x .git/hooks/pre-commit
 	@echo "Pre-commit hook installed."
 
-.PHONY: help up down build bash composer-install migrate migrate-diff fixtures test test-unit test-integration test-functional cs cs-fix stan lint cache-clear check install-hooks
+.PHONY: help install up down build bash composer-install migrate migrate-diff fixtures cache-clear cache-warmup test test-unit test-integration test-functional cs cs-fix stan lint check install-hooks
