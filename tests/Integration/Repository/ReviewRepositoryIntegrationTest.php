@@ -16,10 +16,18 @@ class ReviewRepositoryIntegrationTest extends KernelTestCase
     protected function setUp(): void
     {
         self::bootKernel();
-        $this->em = static::getContainer()->get('doctrine.orm.entity_manager');
+
+        $entityManager = static::getContainer()->get('doctrine.orm.entity_manager');
+        \assert($entityManager instanceof \Doctrine\ORM\EntityManagerInterface);
+        $this->em = $entityManager;
+
         $this->repository = $this->em->getRepository(Review::class);
 
         $this->em->createQuery('DELETE FROM App\Entity\Review r')->execute();
+
+        /** @var \Symfony\Contracts\Cache\CacheInterface $cache */
+        $cache = static::getContainer()->get('cache.app');
+        $cache->clear();
     }
 
     private function createReview(string $company, int $rating): Review

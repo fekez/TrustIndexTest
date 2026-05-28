@@ -1,0 +1,10 @@
+framework:
+  rate_limiter:
+    review_submit:
+      policy: sliding_window
+      limit: 10
+      interval: '10 minutes'
+    review_delete:
+      policy: sliding_window
+      limit: 10
+      interval: '10 minutes'

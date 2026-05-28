@@ -49,6 +49,11 @@ Az alkalmazás elérhető: http://localhost:8080
 - **Keresés** (`GET /companies?q=...`) – case-insensitive részleges keresés cég neve alapján
 - **Health check** (`GET /health`) – `{"status":"ok","db":"ok","timestamp":"..."}` JSON válasz
 - **Strukturált logolás** – minden mentett vélemény JSON formátumban naplózva (`var/log/dev.log`)
+- **Logikai törlés** (`POST /review/{id}/delete`) – review trash-be helyezése, az adat megmarad a DB-ben
+- **Rate limiting** – IP-nként max 5 beküldés és törlés / 10 perc
+- **Lapozás** – vélemények listája (10/oldal), cégrangsor (15/oldal)
+- **Csillag widget** – interaktív JS értékelő a form oldalon
+- **Cache** – cégstatisztika 5 percig gyorsítótárazva
 
 ---
 
@@ -82,10 +87,17 @@ docker compose exec php vendor/bin/phpstan analyse
 
 ## Munkaidő napló
 
-| Feladat | Idő          |
-|---------|--------------|
-| M1 – Docker + Symfony skeleton + CI | ~1.5 óra     |
-| M2 – Entitás + migráció + lista | ~1.5 óra     |
-| M3 – Form + validáció + flash + logolás | ~1 óra       |
-| M4 – Részletező + statisztika + keresés + health check | ~0.5 óra     |
-| **Összesen** | **~4.5 óra** |
+| Feladat | Idő           |
+|---------|---------------|
+| M1 – Docker + Symfony skeleton + CI | ~1.5 óra      |
+| M2 – Entitás + migráció + lista | ~1.5 óra      |
+| M3 – Form + validáció + flash + logolás | ~1 óra        |
+| M4 – Részletező + statisztika + keresés + health check | ~0.5 óra      |
+| M5 – Bónuszok (state, rate limit, pagination, widget, cache) | ~0.75 óra     |
+| **Összesen** | **~5.25 óra** |
+
+
+---
+
+## Megjegyzések
+-  CSRF védelem a törlés form-nál a ```symfony/security-csrf``` telepítésével adható hozzá.

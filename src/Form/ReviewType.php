@@ -6,8 +6,8 @@ namespace App\Form;
 
 use App\Entity\Review;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -24,17 +24,8 @@ class ReviewType extends AbstractType
                 'label' => 'Cég neve',
                 'attr' => ['placeholder' => 'pl. Trustindex Kft.'],
             ])
-            ->add('rating', ChoiceType::class, [
-                'label' => 'Értékelés',
-                'choices' => [
-                    '★★★★★ 5' => 5,
-                    '★★★★ 4' => 4,
-                    '★★★ 3' => 3,
-                    '★★ 2' => 2,
-                    '★ 1' => 1,
-                ],
-                'expanded' => false,
-                'multiple' => false,
+            ->add('rating', HiddenType::class, [
+                'attr' => ['id' => 'rating-input'],
             ])
             ->add('reviewText', TextareaType::class, [
                 'label' => 'Vélemény szövege',

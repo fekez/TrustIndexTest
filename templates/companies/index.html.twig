@@ -28,11 +28,11 @@
 {% if query %}
     <p class="text-muted small mb-3">
         Találatok erre: <strong>„{{ query }}"</strong>
-        {% if stats is empty %} – nincs találat{% endif %}
+        {% if pagination is empty %} – nincs találat{% endif %}
     </p>
 {% endif %}
 
-{% if stats is empty %}
+{% if pagination is empty %}
     <div class="alert alert-info">
         {% if query %}
             Nincs találat a megadott keresési feltételre.
@@ -54,7 +54,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for row in stats %}
+                    {% for row in pagination %}
                     <tr>
                         <td class="ps-3 text-muted">{{ loop.index }}</td>
                         <td class="fw-semibold">{{ row.company_name }}</td>
@@ -73,6 +73,10 @@
                 </tbody>
             </table>
         </div>
+    </div>
+
+    <div class="d-flex justify-content-center mt-4">
+        {{ knp_pagination_render(pagination) }}
     </div>
 {% endif %}
 {% endblock %}

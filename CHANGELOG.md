@@ -6,6 +6,30 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+## [0.5.0] - 2026-05-28
+
+### Added (M5 – Bónuszok)
+- `src/Enum/ReviewState.php` – `ReviewState` backed enum (`Published` / `Trash`)
+- `object_state` oszlop a `review` táblán – `VARCHAR(9) DEFAULT 'published' NOT NULL`
+- `POST /review/{id}/delete` – logikai törlés: `object_state` → `trash`, CSRF nélkül (lásd README)
+- Rate limiter: IP-nként max 5 beküldés és 5 törlés / 10 perc (`symfony/rate-limiter`)
+- Pagination: `GET /` oldalanként 10 review, `GET /companies` oldalanként 15 cég (`knplabs/knp-paginator-bundle`)
+- Csillag JS widget: interaktív 5 csillagos értékelő a form oldalon, Vanilla JS + CSS, HiddenType
+- Symfony Cache: `getCompanyStats()` eredménye 5 percig cache-elve, invalidálás mentéskor és törlésekor
+- `config/packages/rate_limiter.yaml` – `review_submit` és `review_delete` policy
+- `config/packages/knp_paginator.yaml` – Bootstrap 5 pagination template
+- `translations/KnpPaginatorBundle.hu.yaml` – magyar lapozó feliratok
+
+### Changed
+- `src/Entity/Review.php` – `objectState` mező hozzáadva, `isPublished()` / `isTrash()` helper metódusok
+- `src/Repository/ReviewRepository.php` – minden publikus lekérdezés szűr `object_state = 'published'`-re; cache injektálva
+- `src/Controller/ReviewController.php` – delete action, rate limiter bekötés, pagination, cache invalidálás
+- `src/Form/ReviewType.php` – `rating` mező `HiddenType`-ra cserélve
+- `templates/review/index.html.twig` – törlés gomb, pagination widget
+- `templates/review/show.html.twig` – törlés gomb
+- `templates/review/new.html.twig` – csillag JS widget, `{% block stylesheets %}` és `{% block javascripts %}`
+- `templates/companies/index.html.twig` – pagination widget
+
 ## [0.4.0] - 2026-05-27
 
 ### Added (M4 – Részletező + statisztika + keresés + health check)

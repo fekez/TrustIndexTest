@@ -8,17 +8,17 @@
     <a href="{{ path('review_new') }}" class="btn btn-primary">+ Új vélemény</a>
 </div>
 
-{% if reviews is empty %}
+{% if pagination is empty %}
     <div class="alert alert-info">Még nincs vélemény. Legyél az első!</div>
 {% else %}
     <div class="row g-3">
-        {% for review in reviews %}
+        {% for review in pagination %}
         <div class="col-12">
             <div class="card shadow-sm">
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-start">
                         <h5 class="card-title mb-1">{{ review.companyName }}</h5>
-                        <small class="text-muted">{{ review.createdAt|date('Y. m. d.') }}</small>
+                        <small class="text-muted">{{ review.createdAt|date('Y. m. d. H:i') }}</small>
                     </div>
                     <div class="text-warning mb-2" aria-label="{{ review.rating }} csillag az 5-ből">
                         {% for i in 1..5 %}
@@ -33,14 +33,24 @@
                     </p>
                     <div class="d-flex justify-content-between align-items-center">
                         <small class="text-muted">{{ review.authorEmail }}</small>
-                        <a href="{{ path('review_show', {id: review.id}) }}" class="btn btn-sm btn-outline-secondary">
-                            Részletek →
-                        </a>
+                        <div class="d-flex gap-2">
+                            <a href="{{ path('review_show', {id: review.id}) }}" class="btn btn-sm btn-outline-secondary">
+                                Részletek →
+                            </a>
+                            <form method="post" action="{{ path('review_delete', {id: review.id}) }}"
+                                  onsubmit="return confirm('Biztosan törölni szeretnéd?')">
+                                <button type="submit" class="btn btn-sm btn-outline-danger">Törlés</button>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
         {% endfor %}
+    </div>
+
+    <div class="d-flex justify-content-center mt-4">
+        {{ knp_pagination_render(pagination) }}
     </div>
 {% endif %}
 {% endblock %}

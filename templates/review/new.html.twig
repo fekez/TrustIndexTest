@@ -2,6 +2,26 @@
 
 {% block title %}Új vélemény{% endblock %}
 
+{% block stylesheets %}
+    <style>
+        .star-rating {
+            display: flex;
+            gap: 4px;
+        }
+        .star {
+            font-size: 2rem;
+            color: #ccc;
+            cursor: pointer;
+            transition: color 0.15s;
+            user-select: none;
+        }
+        .star.selected,
+        .star.hovered {
+            color: #f5a623;
+        }
+    </style>
+{% endblock %}
+
 {% block body %}
 <div class="row justify-content-center">
     <div class="col-md-7 col-lg-6">
@@ -19,8 +39,14 @@
                 </div>
 
                 <div class="mb-3">
-                    {{ form_label(form.rating, null, {'label_attr': {'class': 'form-label fw-semibold'}}) }}
-                    {{ form_widget(form.rating, {'attr': {'class': 'form-select' ~ (form.rating.vars.errors|length > 0 ? ' is-invalid' : '')}}) }}
+                    <label class="form-label fw-semibold">Értékelés</label>
+                    <div class="star-rating mb-1">
+                        {% for i in 1..5 %}
+                            <span class="star" data-value="{{ i }}">★</span>
+                        {% endfor %}
+                    </div>
+                    <small class="text-muted star-label">Kattints egy csillagra</small>
+                    {{ form_widget(form.rating) }}
                     {{ form_errors(form.rating) }}
                 </div>
 
@@ -48,4 +74,47 @@
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const stars = document.querySelectorAll('.star');
+            const input = document.getElementById('review_rating');
+            const label = document.querySelector('.star-label');
+            const labels = ['', 'Nagyon rossz', 'Rossz', 'Közepes', 'Jó', 'Kiváló'];
+
+            // default: 5 csillag, vagy a már beküldött érték
+            const currentValue = parseInt(input.value) || 5;
+            input.value = currentValue;
+            updateStars(currentValue);
+
+            stars.forEach(function (star) {
+                star.addEventListener('mouseenter', function () {
+                    const val = parseInt(this.dataset.value);
+                    stars.forEach(s => {
+                        s.classList.toggle('hovered', parseInt(s.dataset.value) <= val);
+                    });
+                });
+
+                star.addEventListener('mouseleave', function () {
+                    stars.forEach(s => s.classList.remove('hovered'));
+                });
+
+                star.addEventListener('click', function () {
+                    const val = parseInt(this.dataset.value);
+                    input.value = val;
+                    updateStars(val);
+                    label.textContent = labels[val];
+                });
+            });
+
+            function updateStars(val) {
+                stars.forEach(s => {
+                    s.classList.toggle('selected', parseInt(s.dataset.value) <= val);
+                });
+                label.textContent = labels[val];
+            }
+        });
+    </script>
 {% endblock %}

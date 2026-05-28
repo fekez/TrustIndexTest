@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Enum\ReviewState;
 use App\Repository\ReviewRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -43,6 +44,9 @@ class Review
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
     private \DateTimeImmutable $updatedAt;
+
+    #[ORM\Column(type: Types::STRING, length: 9, enumType: ReviewState::class, options: ['default' => 'published'])]
+    private ReviewState $objectState = ReviewState::Published;
 
     public function __construct()
     {
@@ -117,5 +121,27 @@ class Review
     public function getUpdatedAt(): \DateTimeImmutable
     {
         return $this->updatedAt;
+    }
+
+    public function getObjectState(): ReviewState
+    {
+        return $this->objectState;
+    }
+
+    public function setObjectState(ReviewState $objectState): static
+    {
+        $this->objectState = $objectState;
+
+        return $this;
+    }
+
+    public function isPublished(): bool
+    {
+        return ReviewState::Published === $this->objectState;
+    }
+
+    public function isTrash(): bool
+    {
+        return ReviewState::Trash === $this->objectState;
     }
 }
