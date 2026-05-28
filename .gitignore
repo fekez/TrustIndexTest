@@ -34,3 +34,7 @@ Thumbs.db
 
 # PHPStan
 /phpstan.result.cache
+
+# Docker volumes (Loki / Grafana)
+/docker/loki/data/
+/docker/grafana/data/

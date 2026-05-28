@@ -54,6 +54,9 @@ Az alkalmazás elérhető: http://localhost:8080
 - **Lapozás** – vélemények listája (10/oldal), cégrangsor (15/oldal)
 - **Csillag widget** – interaktív JS értékelő a form oldalon
 - **Cache** – cégstatisztika 5 percig gyorsítótárazva
+- **Log monitoring** – Loki + Promtail + Grafana stack
+- **Grafana elérhető: http://localhost:3000 (admin/admin) - Explore > jobs + symfony 
+- **Favicon** – SVG favicon (`public/favicon.svg`)
 
 ---
 
@@ -94,7 +97,8 @@ docker compose exec php vendor/bin/phpstan analyse
 | M3 – Form + validáció + flash + logolás | ~1 óra        |
 | M4 – Részletező + statisztika + keresés + health check | ~0.5 óra      |
 | M5 – Bónuszok (state, rate limit, pagination, widget, cache) | ~0.75 óra     |
-| **Összesen** | **~5.25 óra** |
+| M6 – Loki + Grafana + favicon | ~0.5 óra      |
+| **Összesen** | **~5.75 óra** |
 
 
 ---

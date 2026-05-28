@@ -6,6 +6,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+## [0.6.0] - 2026-05-28
+
+### Added (M6 – Loki + Grafana log stack + favicon)
+- `docker/loki/loki-config.yaml` – Loki 2.9.4 konfig: filesystem storage, tsdb schema, auth disabled
+- `docker/promtail/promtail-config.yaml` – Promtail 2.9.4: `var/log/*.log` figyelése, JSON pipeline stage-ek (level, channel, timestamp labelek)
+- `docker/grafana/provisioning/datasources/loki.yaml` – Loki datasource auto-provision, induláskor kézi konfig nélkül elérhető
+- `public/favicon.svg` – SVG favicon (zöld csillag), eliminálta a `/favicon.ico` 404 log zajt
+
+### Changed
+- `docker-compose.yml` – Loki, Promtail, Grafana konténerek hozzáadva; `loki_data`, `grafana_data` named volume-ok
+- `templates/base.html.twig` – `<link rel="icon">` hivatkozás a favicon.svg-re
+- `.gitignore` – `docker/loki/data/` és `docker/grafana/data/` kizárva
+
 ## [0.5.0] - 2026-05-28
 
 ### Added (M5 – Bónuszok)
